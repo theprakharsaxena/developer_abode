@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "rootDir": "./api",
+    "strict": true,
+    "esModuleInterop": true,
+    "typeRoots": ["./api/types", "./node_modules/@types"]
+  },
+  "include": ["api/**/*.ts"],
+  "exclude": ["node_modules"]
+}
