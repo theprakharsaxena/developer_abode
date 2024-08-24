@@ -2,10 +2,18 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+dotenv.config();
+
+const mongodbUri = process.env.MONGODB_URI || "";
+const jwtSecret = process.env.JWT_SECRET || "";
+const jwtExpiration = process.env.JWT_EXPIRATION || "1h";
+const emailUser = process.env.EMAIL_USER || "";
+const emailPassword = process.env.EMAIL_PASSWORD || "";
+
 export const config = {
-  mongodbUri: process.env.MONGODB_URI || "",
-  jwtSecret: process.env.JWT_SECRET || "",
-  jwtExpiration: process.env.JWT_EXPIRATION || "1h",
-  emailUser: process.env.EMAIL_USER || "",
-  emailPassword: process.env.EMAIL_PASSWORD || "",
+  mongodbUri,
+  jwtSecret,
+  jwtExpiration,
+  emailUser,
+  emailPassword,
 };
