@@ -1,10 +1,11 @@
 import dotenv from "dotenv";
 import app from "./app";
 import { connectDB } from "./config/database";
+import { config } from "./config/config";
 
 dotenv.config();
 
-const PORT = process.env.PORT || 3000;
+const PORT = config.port || 3000;
 
 // Define a simple route
 app.get("/", (req, res) => {
