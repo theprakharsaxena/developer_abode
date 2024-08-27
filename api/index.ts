@@ -87,16 +87,14 @@ const connectDB = async () => {
 };
 
 // Start the server for local development
-if (process.env.NODE_ENV === "production") {
-  const startServer = async () => {
-    await connectDB();
-    app.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT}`);
-    });
-  };
+const startServer = async () => {
+  await connectDB();
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
+};
 
-  startServer();
-}
+startServer();
 
 // Export the handler for serverless environments
 export const handler = serverless(app);
