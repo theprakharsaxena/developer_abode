@@ -1,11 +1,11 @@
 import dotenv from "dotenv";
 import app from "./app";
-import { connectDB } from "./config/database";
-import { config } from "./config/config";
+// import { connectDB } from "./config/database";
+// import { config } from "./config/config";
 
 dotenv.config();
 
-const PORT = config.port || 3000;
+// const PORT = config.port || 3000;
 
 // Define a simple route
 app.get("/", (req, res) => {
@@ -14,9 +14,9 @@ app.get("/", (req, res) => {
 
 // Start the server
 const startServer = async () => {
-  await connectDB();
-  app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+  // await connectDB();
+  app.listen(3000, () => {
+    console.log(`Server running on http://localhost:${3000}`);
   });
 };
 
