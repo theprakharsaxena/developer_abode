@@ -28,6 +28,7 @@ import {
   submitGithubLink,
 } from "./controllers/enrollment.controller";
 import mongoose from "mongoose";
+import serverless from "serverless-http";
 
 const app = express();
 dotenv.config();
@@ -54,7 +55,6 @@ app.use("/api/v1/tasks", taskRouter);
 app.use("/api/v1/enrollments", enrollmentRouter);
 
 authRouter.post("/verify", verifyUser);
-
 userRouter.post("/register", registerUser);
 userRouter.post("/login", loginUser);
 userRouter.post("/forgotPassword", forgotPassword);
@@ -86,12 +86,17 @@ const connectDB = async () => {
   }
 };
 
-// Start the server
-const startServer = async () => {
-  await connectDB();
-  app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-  });
-};
+// Start the server for local development
+if (process.env.NODE_ENV === "production") {
+  const startServer = async () => {
+    await connectDB();
+    app.listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  };
 
-startServer();
+  startServer();
+}
+
+// Export the handler for serverless environments
+export const handler = serverless(app);
