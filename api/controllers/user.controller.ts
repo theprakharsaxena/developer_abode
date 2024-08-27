@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import User from "../models/user.model";
-import { generateToken } from "../index";
+import { generateToken } from "../utils";
 import crypto from "crypto";
-import { sendEmail } from "../index";
+import { sendEmail } from "../utils";
 
 const verifyUser = async (req: Request, res: Response) => {
   const { email, verificationCode } = req.body;

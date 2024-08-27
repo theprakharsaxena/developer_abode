@@ -1,6 +1,4 @@
 import dotenv from "dotenv";
-import jwt from "jsonwebtoken";
-import nodemailer from "nodemailer";
 import { config } from "./config";
 import express, { Router } from "express";
 import helmet from "helmet";
@@ -78,7 +76,7 @@ taskRouter.delete("/:id", deleteTask);
 enrollmentRouter.post("/enroll", authMiddleware, enrollInInternship);
 enrollmentRouter.post("/submit", authMiddleware, submitGithubLink);
 
-export const connectDB = async () => {
+const connectDB = async () => {
   try {
     await mongoose.connect(config.mongodbUri);
     console.log("MongoDB connected");
@@ -97,34 +95,3 @@ const startServer = async () => {
 };
 
 startServer();
-
-export const generateToken = (userId: string) => {
-  return jwt.sign({ id: userId }, config.jwtSecret, {
-    expiresIn: config.jwtExpiration,
-  });
-};
-
-export const verifyToken = (token: string) => {
-  return jwt.verify(token, config.jwtSecret);
-};
-
-export const sendEmail = async (to: string, subject: string, text: string) => {
-  const transporter = nodemailer.createTransport({
-    service: "gmail", // You can use other services or SMTP settings
-    secure: true,
-    port: 465,
-    auth: {
-      user: config.emailUser,
-      pass: config.emailPassword,
-    },
-  });
-
-  const mailOptions = {
-    from: config.emailUser,
-    to,
-    subject,
-    text,
-  };
-
-  await transporter.sendMail(mailOptions);
-};

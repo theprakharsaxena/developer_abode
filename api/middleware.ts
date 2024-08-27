@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { JwtPayload } from "jsonwebtoken";
-import { verifyToken } from "./index";
+import { verifyToken } from "./utils";
 import jwt from "jsonwebtoken";
 
 const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
