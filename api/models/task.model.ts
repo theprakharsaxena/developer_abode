@@ -1,6 +1,6 @@
 import { Schema, model, Document } from "mongoose";
 
-export interface ITask extends Document {
+interface ITask extends Document {
   title: string;
   description: string;
   mediaUrl: string;

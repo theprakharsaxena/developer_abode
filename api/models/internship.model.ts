@@ -1,6 +1,6 @@
 import { Schema, model, Document, Types } from "mongoose";
 
-export interface IInternship extends Document {
+interface IInternship extends Document {
   title: string;
   description: string;
   mediaUrl?: string;

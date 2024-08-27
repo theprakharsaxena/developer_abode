@@ -1,6 +1,6 @@
 import { Schema, model, Document } from "mongoose";
 
-export interface ITaskSubmission extends Document {
+interface ITaskSubmission extends Document {
   task: Schema.Types.ObjectId;
   githubLink: string;
   liveLink: string;

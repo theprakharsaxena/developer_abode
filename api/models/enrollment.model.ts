@@ -1,10 +1,5 @@
 import { Schema, model } from "mongoose";
 
-interface ITaskSubmission {
-  task: Schema.Types.ObjectId;
-  githubLink: string;
-}
-
 interface IEnrollment extends Document {
   user: Schema.Types.ObjectId;
   internship: Schema.Types.ObjectId;
