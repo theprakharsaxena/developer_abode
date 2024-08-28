@@ -7,7 +7,7 @@ dotenv.config();
 const PORT = config.port || 3000;
 
 app.get("/", (req, res) => {
-  res.json({ message: "Development: Server is running" });
+  res.json({ message: `${config.environment}: Server is running` });
 });
 
 // Start the server for local development
