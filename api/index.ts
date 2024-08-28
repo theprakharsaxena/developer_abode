@@ -4,7 +4,7 @@ import app from "./app";
 import { connectDB } from "./utils";
 
 dotenv.config();
-const PORT = config.port || 3000;
+const PORT = config.port || 8080;
 
 app.get("/", (req, res) => {
   res.json({ message: `${config.environment}: Server is running` });
