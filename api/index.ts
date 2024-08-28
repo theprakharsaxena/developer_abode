@@ -11,7 +11,8 @@ app.get("/", (req, res) => {
   res.json({ message: "Development: Server is running" });
 });
 
-const connectDB = async () => {
+// Start the server for local development
+const startServer = async () => {
   try {
     await mongoose.connect(config.mongodbUri);
     console.log("MongoDB connected");
@@ -19,11 +20,6 @@ const connectDB = async () => {
     console.error("Error connecting to MongoDB:", error);
     process.exit(1);
   }
-};
-
-// Start the server for local development
-const startServer = async () => {
-  await connectDB();
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
   });
