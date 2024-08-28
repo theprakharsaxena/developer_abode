@@ -2,7 +2,7 @@
   "name": "developer_abode",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "dev": "nodemon api/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
