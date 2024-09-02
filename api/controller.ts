@@ -90,7 +90,8 @@ export const loginUser = async (req: Request, res: Response) => {
       return res.status(400).send("Invalid email or password");
     }
     const token = generateToken(user._id as string);
-    res.send({ token });
+    const name = user.name as string
+    res.send({ token,name });
   } catch (error) {
     res.status(400).send(error);
   }
