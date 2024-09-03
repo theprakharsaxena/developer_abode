@@ -32,7 +32,7 @@ userRouter.post("/register", registerUser);
 userRouter.post("/login", loginUser);
 userRouter.post("/forgotPassword", forgotPassword);
 userRouter.post("/resetPassword/:token", resetPassword);
-userRouter.get("/:id", getUser);
+userRouter.get("/get", authMiddleware, getUser);
 
 internshipRouter.post("/", createInternship);
 internshipRouter.get("/", getInternships);

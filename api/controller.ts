@@ -89,9 +89,9 @@ export const loginUser = async (req: Request, res: Response) => {
     if (!user || !(await user.comparePassword(password))) {
       return res.status(400).send("Invalid email or password");
     }
-    const token = generateToken(user._id as string);
-    const name = user.name as string
-    res.send({ token,name });
+    const id = user._id as string;
+    const token = generateToken(id);
+    res.send({ token });
   } catch (error) {
     res.status(400).send(error);
   }
@@ -173,12 +173,14 @@ export const resetPassword = async (req: Request, res: Response) => {
 };
 
 export const getUser = async (req: Request, res: Response) => {
+  const userId = (req.user as { id: string }).id; // Extract userId from req.user
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(userId);
     if (!user) {
       return res.status(404).send("User not found");
     }
-    res.send(user);
+    const { name, email, isVerified } = user;
+    res.send({ name, email, isVerified });
   } catch (error) {
     res.status(400).send(error);
   }
