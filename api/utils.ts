@@ -14,9 +14,10 @@ export const connectDB = async () => {
 };
 
 export const generateToken = (userId: string) => {
-  return jwt.sign({ id: userId }, config.jwtSecret, {
-    expiresIn: config.jwtExpiration,
-  });
+  return jwt.sign({ id: userId }, config.jwtSecret)
+  // {
+  //   expiresIn: config.jwtExpiration,
+  // }
 };
 
 export const verifyToken = (token: string) => {
