@@ -18,6 +18,7 @@ import {
   updateInternship,
   enrollInInternship,
   submitGithubLink,
+  getUserInternships,
 } from "./controller";
 import { authMiddleware } from "./middleware";
 
@@ -47,6 +48,7 @@ taskRouter.put("/:id", updateTask);
 taskRouter.delete("/:id", deleteTask);
 
 enrollmentRouter.post("/enroll", authMiddleware, enrollInInternship);
+enrollmentRouter.get("/enrolled", authMiddleware, getUserInternships);
 enrollmentRouter.post("/submit", authMiddleware, submitGithubLink);
 
 export {

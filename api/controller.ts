@@ -340,6 +340,18 @@ export const enrollInInternship = async (req: Request, res: Response) => {
   const { internshipId } = req.body;
 
   try {
+    // Check if the user is already enrolled in the internship
+    const existingEnrollment = await Enrollment.findOne({
+      user: userId,
+      internship: internshipId,
+    });
+
+    if (existingEnrollment) {
+      return res
+        .status(400)
+        .json({ message: "User is already enrolled in this internship" });
+    }
+
     // Find the internship to get the tasks
     const internship = await Internship.findById(internshipId).populate(
       "tasks"
@@ -367,6 +379,33 @@ export const enrollInInternship = async (req: Request, res: Response) => {
     });
 
     res.status(201).json(newEnrollment);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const getUserInternships = async (req: Request, res: Response) => {
+  const userId = (req.user as { id: string }).id; // Extract userId from req.user
+
+  try {
+    // Find all enrollments for the user and populate the internship details
+    const enrollments = await Enrollment.find({ user: userId }).populate({
+      path: "internship",
+      populate: { path: "tasks" }, // Populate tasks inside internships
+    });
+    console.log(enrollments);
+
+    if (!enrollments || enrollments.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No enrollments found for this user" });
+    }
+
+    // Extract the internships from the enrollments
+    const internships = enrollments.map((enrollment) => enrollment.internship);
+
+    res.status(200).json(internships);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
