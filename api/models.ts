@@ -23,10 +23,10 @@ export const TaskSubmission = model<ITaskSubmission>(
 
 interface IEnrollment extends Document {
   user: Schema.Types.ObjectId;
-  internship: Schema.Types.ObjectId;
+  internship: Schema.Types.ObjectId | IInternship;
   startDate: Date;
   endDate: Date;
-  taskSubmissions: Schema.Types.ObjectId[];
+  taskSubmissions: Schema.Types.ObjectId[] | ITaskSubmission[];
   isInternshipFinished: boolean;
 }
 
@@ -52,7 +52,7 @@ interface IInternship extends Document {
   title: string;
   description: string;
   mediaUrl?: string;
-  tasks: Schema.Types.ObjectId[]; // Reference to the Task model
+  tasks: Schema.Types.ObjectId[] | ITask[]; // Reference to the Task model
 }
 
 const internshipSchema = new Schema<IInternship>({

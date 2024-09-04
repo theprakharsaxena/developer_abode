@@ -390,11 +390,15 @@ export const getUserInternships = async (req: Request, res: Response) => {
 
   try {
     // Find all enrollments for the user and populate the internship details
-    const enrollments = await Enrollment.find({ user: userId }).populate({
-      path: "internship",
-      populate: { path: "tasks" }, // Populate tasks inside internships
-    });
-    console.log(enrollments);
+    const enrollments = await Enrollment.find({ user: userId })
+      .populate({
+        path: "internship",
+        populate: { path: "tasks" }, // Populate tasks inside internships
+      })
+      .populate({
+        path: "taskSubmissions", // Populate taskSubmissions
+        populate: { path: "task" }, // Populate task inside each taskSubmission
+      });
 
     if (!enrollments || enrollments.length === 0) {
       return res
@@ -402,10 +406,7 @@ export const getUserInternships = async (req: Request, res: Response) => {
         .json({ message: "No enrollments found for this user" });
     }
 
-    // Extract the internships from the enrollments
-    const internships = enrollments.map((enrollment) => enrollment.internship);
-
-    res.status(200).json(internships);
+    res.status(200).json(enrollments);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
