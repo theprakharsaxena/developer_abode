@@ -349,7 +349,7 @@ export const enrollInInternship = async (req: Request, res: Response) => {
     if (existingEnrollment) {
       return res
         .status(400)
-        .json({ message: "User is already enrolled in this internship" });
+        .json({ message: "You are already enrolled in this internship" });
     }
 
     // Find the internship to get the tasks
