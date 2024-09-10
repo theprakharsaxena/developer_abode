@@ -365,7 +365,6 @@ export const enrollInInternship = async (req: Request, res: Response) => {
       internship.tasks.map(async (task: any) => {
         const taskSubmission = await TaskSubmission.create({
           task: task._id,
-          githubLink: "", // Initially empty, will be filled later
         });
         return taskSubmission._id;
       })
@@ -415,7 +414,7 @@ export const getUserInternships = async (req: Request, res: Response) => {
 
 export const submitGithubLink = async (req: Request, res: Response) => {
   const userId = (req.user as { id: string }).id; // Extract userId from req.user
-  const { enrollmentId, taskId, githubLink } = req.body;
+  const { enrollmentId, taskId, githubLink, liveLink } = req.body;
 
   try {
     // Find the enrollment
@@ -437,7 +436,50 @@ export const submitGithubLink = async (req: Request, res: Response) => {
     }
 
     taskSubmission.githubLink = githubLink;
+    taskSubmission.liveLink = liveLink;
+    taskSubmission.errorMessage = "";
+    taskSubmission.isInReview = true;
     await taskSubmission.save();
+
+    // After successfully saving, schedule to mark the task as completed in 1 hour
+    setTimeout(async () => {
+      try {
+        // Find the current task submission to ensure the conditions are met
+        const taskSubmissionCheck = await TaskSubmission.findById(
+          taskSubmission._id
+        );
+
+        // Check if the taskSubmission exists and passes the conditions
+        if (
+          taskSubmissionCheck &&
+          taskSubmissionCheck.githubLink.includes("github.com")
+        ) {
+          const updatedTaskSubmission = await TaskSubmission.findByIdAndUpdate(
+            taskSubmission._id,
+            { isCompleted: true, isInReview: false },
+            { new: true }
+          );
+        } else if (
+          taskSubmissionCheck &&
+          !taskSubmissionCheck.githubLink.includes("github.com")
+        ) {
+          const updatedTaskSubmission = await TaskSubmission.findByIdAndUpdate(
+            taskSubmission._id,
+            {
+              errorMessage:
+                "TaskSubmission not marked as completed due to failing conditions: githubLink",
+              isInReview: false,
+            },
+            { new: true }
+          );
+        }
+      } catch (error) {
+        // console.error(
+        //   `Error marking TaskSubmission ${taskSubmission._id} as completed: `,
+        //   error
+        // );
+      }
+    }, 60 * 60 * 1000); // 1 hour in milliseconds
 
     res
       .status(200)

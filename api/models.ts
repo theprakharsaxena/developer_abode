@@ -6,14 +6,18 @@ interface ITaskSubmission extends Document {
   task: Schema.Types.ObjectId;
   githubLink: string;
   liveLink: string;
-  isSubmitted: boolean;
+  isCompleted: boolean;
+  isInReview: boolean;
+  errorMessage: string;
 }
 
 const taskSubmissionSchema = new Schema<ITaskSubmission>({
   task: { type: Schema.Types.ObjectId, ref: "Task", required: true },
   githubLink: { type: String, default: "" },
   liveLink: { type: String, default: "" },
-  isSubmitted: { type: Boolean, default: false },
+  isCompleted: { type: Boolean, default: false },
+  isInReview: { type: Boolean, default: false },
+  errorMessage: { type: String, default: "" },
 });
 
 export const TaskSubmission = model<ITaskSubmission>(
