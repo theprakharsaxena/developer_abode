@@ -422,8 +422,6 @@ export const getUserInternships = async (req: Request, res: Response) => {
           new Date(taskSubmission.forReviewDate) < new Date() &&
           taskSubmission.isInReview
         ) {
-          console.log(taskSubmission.githubLink);
-
           try {
             // Find the current task submission to ensure the conditions are met
             const taskSubmissionCheck = await TaskSubmission.findById(
@@ -454,11 +452,6 @@ export const getUserInternships = async (req: Request, res: Response) => {
                 { new: true }
               );
             }
-
-            // Console log the forReviewDate
-            console.log(
-              `TaskSubmission forReviewDate: ${taskSubmission.forReviewDate}`
-            );
           } catch (error) {
             console.error(
               `Error marking TaskSubmission ${taskSubmission._id} as completed: `,
@@ -514,7 +507,7 @@ export const submitGithubLink = async (req: Request, res: Response) => {
     taskSubmission.liveLink = liveLink;
     taskSubmission.errorMessage = "";
     taskSubmission.isInReview = true;
-    taskSubmission.forReviewDate = new Date(Date.now() + 60 * 1000);
+    taskSubmission.forReviewDate = new Date(Date.now() + 10 * 60 * 1000);
     await taskSubmission.save();
 
     res
