@@ -479,7 +479,7 @@ export const submitGithubLink = async (req: Request, res: Response) => {
         //   error
         // );
       }
-    }, 60 * 60 * 1000); // 1 hour in milliseconds
+    }, 60 * 1000); // 1 hour in milliseconds
 
     res
       .status(200)
