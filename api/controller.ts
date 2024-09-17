@@ -1,5 +1,12 @@
 import { Request, Response } from "express";
-import { Task, Internship, Enrollment, TaskSubmission, User } from "./models";
+import {
+  Task,
+  Internship,
+  Enrollment,
+  TaskSubmission,
+  User,
+  ITaskSubmission,
+} from "./models";
 import { generateToken } from "./utils";
 import crypto from "crypto";
 import { sendEmail } from "./utils";
@@ -405,6 +412,63 @@ export const getUserInternships = async (req: Request, res: Response) => {
         .json({ message: "No enrollments found for this user" });
     }
 
+    // Use for...of to allow async/await
+    for (const enrollment of enrollments) {
+      // Cast taskSubmissions as an array of ITaskSubmission
+      const taskSubmissions = enrollment.taskSubmissions as ITaskSubmission[];
+
+      for (const taskSubmission of taskSubmissions) {
+        if (
+          new Date(taskSubmission.forReviewDate) < new Date() &&
+          taskSubmission.isInReview
+        ) {
+          console.log(taskSubmission.githubLink);
+
+          try {
+            // Find the current task submission to ensure the conditions are met
+            const taskSubmissionCheck = await TaskSubmission.findById(
+              taskSubmission._id
+            );
+
+            // Check if the taskSubmission exists and passes the conditions
+            if (
+              taskSubmissionCheck &&
+              taskSubmissionCheck.githubLink.includes("github.com")
+            ) {
+              await TaskSubmission.findByIdAndUpdate(
+                taskSubmission._id,
+                { isCompleted: true, isInReview: false },
+                { new: true }
+              );
+            } else if (
+              taskSubmissionCheck &&
+              !taskSubmissionCheck.githubLink.includes("github.com")
+            ) {
+              await TaskSubmission.findByIdAndUpdate(
+                taskSubmission._id,
+                {
+                  errorMessage:
+                    "TaskSubmission not marked as completed due to failing conditions: githubLink",
+                  isInReview: false,
+                },
+                { new: true }
+              );
+            }
+
+            // Console log the forReviewDate
+            console.log(
+              `TaskSubmission forReviewDate: ${taskSubmission.forReviewDate}`
+            );
+          } catch (error) {
+            console.error(
+              `Error marking TaskSubmission ${taskSubmission._id} as completed: `,
+              error
+            );
+          }
+        }
+      }
+    }
+
     res.status(200).json(enrollments);
   } catch (error) {
     console.error(error);
@@ -439,47 +503,8 @@ export const submitGithubLink = async (req: Request, res: Response) => {
     taskSubmission.liveLink = liveLink;
     taskSubmission.errorMessage = "";
     taskSubmission.isInReview = true;
+    taskSubmission.forReviewDate = new Date(Date.now() + 60 * 1000);
     await taskSubmission.save();
-
-    // After successfully saving, schedule to mark the task as completed in 1 hour
-    setTimeout(async () => {
-      try {
-        // Find the current task submission to ensure the conditions are met
-        const taskSubmissionCheck = await TaskSubmission.findById(
-          taskSubmission._id
-        );
-
-        // Check if the taskSubmission exists and passes the conditions
-        if (
-          taskSubmissionCheck &&
-          taskSubmissionCheck.githubLink.includes("github.com")
-        ) {
-          const updatedTaskSubmission = await TaskSubmission.findByIdAndUpdate(
-            taskSubmission._id,
-            { isCompleted: true, isInReview: false },
-            { new: true }
-          );
-        } else if (
-          taskSubmissionCheck &&
-          !taskSubmissionCheck.githubLink.includes("github.com")
-        ) {
-          const updatedTaskSubmission = await TaskSubmission.findByIdAndUpdate(
-            taskSubmission._id,
-            {
-              errorMessage:
-                "TaskSubmission not marked as completed due to failing conditions: githubLink",
-              isInReview: false,
-            },
-            { new: true }
-          );
-        }
-      } catch (error) {
-        // console.error(
-        //   `Error marking TaskSubmission ${taskSubmission._id} as completed: `,
-        //   error
-        // );
-      }
-    }, 60 * 1000); // 1 hour in milliseconds
 
     res
       .status(200)

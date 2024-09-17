@@ -2,13 +2,14 @@ import { Schema, model, Document } from "mongoose";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 
-interface ITaskSubmission extends Document {
+export interface ITaskSubmission extends Document {
   task: Schema.Types.ObjectId;
   githubLink: string;
   liveLink: string;
   isCompleted: boolean;
   isInReview: boolean;
   errorMessage: string;
+  forReviewDate: Date;
 }
 
 const taskSubmissionSchema = new Schema<ITaskSubmission>({
@@ -18,6 +19,7 @@ const taskSubmissionSchema = new Schema<ITaskSubmission>({
   isCompleted: { type: Boolean, default: false },
   isInReview: { type: Boolean, default: false },
   errorMessage: { type: String, default: "" },
+  forReviewDate: { type: Date, default: Date.now },
 });
 
 export const TaskSubmission = model<ITaskSubmission>(
