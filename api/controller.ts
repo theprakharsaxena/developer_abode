@@ -469,7 +469,18 @@ export const getUserInternships = async (req: Request, res: Response) => {
       }
     }
 
-    res.status(200).json(enrollments);
+    // Refetch the updated enrollments to return the latest data
+    const updatedEnrollments = await Enrollment.find({ user: userId })
+      .populate({
+        path: "internship",
+        populate: { path: "tasks" }, // Populate tasks inside internships
+      })
+      .populate({
+        path: "taskSubmissions", // Populate taskSubmissions
+        populate: { path: "task" }, // Populate task inside each taskSubmission
+      });
+
+    res.status(200).json(updatedEnrollments);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
