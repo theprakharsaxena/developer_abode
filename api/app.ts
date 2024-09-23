@@ -3,6 +3,7 @@ import helmet from "helmet";
 import {
   authRouter,
   enrollmentRouter,
+  imageRouter,
   internshipRouter,
   taskRouter,
   userRouter,
@@ -19,5 +20,6 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/internships", internshipRouter);
 app.use("/api/v1/tasks", taskRouter);
 app.use("/api/v1/enrollments", enrollmentRouter);
+app.use("/api/v1/images", imageRouter);
 
 export default app;

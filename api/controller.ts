@@ -10,6 +10,7 @@ import {
 import { generateToken } from "./utils";
 import crypto from "crypto";
 import { sendEmail } from "./utils";
+import { createCanvas, loadImage } from "canvas";
 
 export const verifyUser = async (req: Request, res: Response) => {
   const { email, verificationCode } = req.body;
@@ -516,5 +517,53 @@ export const submitGithubLink = async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const generateImage = async (req: Request, res: Response) => {
+  try {
+    // Get the texts from the query parameters, with default values
+    const { text1 = "Official", text2 = "Verified" } = req.query;
+
+    // Load the image from the provided URL
+    const imageUrl = "https://www.developerabode.com/welcomeLetterOfficial.png";
+    const image = await loadImage(imageUrl).catch((err) => {
+      console.error("Failed to load image:", err);
+      res.status(500).json({ error: "Image loading error" });
+      return null;
+    });
+    if (!image) return; // Early exit if image loading failed
+
+    // Create a canvas with the same dimensions as the image
+    const canvas = createCanvas(image.width, image.height);
+    const ctx = canvas.getContext("2d");
+
+    // Draw the image onto the canvas
+    ctx.drawImage(image, 0, 0, image.width, image.height);
+
+    // Set text properties
+    ctx.font = "600 25px Poppins";
+    ctx.fillStyle = "#323232";
+    ctx.textAlign = "right"; // For top-right text
+
+    // Add the first text in the top-right corner
+    ctx.fillText(text1.toString(), image.width - 137, 450); // 20px padding from the right, 60px from the top
+
+    // Set new alignment for bottom-left text
+    ctx.textAlign = "left"; // For bottom-left text
+
+    // Add the second text in the bottom-left corner
+    ctx.fillText(text2.toString(), 141, 605); // 20px padding from the left, 20px from the bottom
+
+    const buffer = canvas.toBuffer("image/png");
+
+    // Set the response headers for the image
+    res.setHeader("Content-Type", "image/png");
+
+    // Send the image as a response
+    res.send(buffer);
+  } catch (error) {
+    console.error("Error generating image:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };

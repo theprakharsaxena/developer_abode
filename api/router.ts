@@ -19,6 +19,7 @@ import {
   enrollInInternship,
   submitGithubLink,
   getUserInternships,
+  generateImage,
 } from "./controller";
 import { authMiddleware } from "./middleware";
 
@@ -27,6 +28,7 @@ const userRouter = Router();
 const internshipRouter = Router();
 const taskRouter = Router();
 const enrollmentRouter = Router();
+const imageRouter = Router();
 
 authRouter.post("/verify", verifyUser);
 userRouter.post("/register", registerUser);
@@ -51,10 +53,13 @@ enrollmentRouter.post("/enroll", authMiddleware, enrollInInternship);
 enrollmentRouter.get("/enrolled", authMiddleware, getUserInternships);
 enrollmentRouter.post("/submit", authMiddleware, submitGithubLink);
 
+imageRouter.get("/generate-image", generateImage);
+
 export {
   authRouter,
   userRouter,
   internshipRouter,
   taskRouter,
   enrollmentRouter,
+  imageRouter,
 };
