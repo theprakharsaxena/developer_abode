@@ -542,7 +542,7 @@ export const generateImage = async (req: Request, res: Response) => {
     ctx.drawImage(image, 0, 0, image.width, image.height);
 
     // Set text properties
-    ctx.font = "600 25px Poppins";
+    ctx.font = "600 25px";
     ctx.fillStyle = "#323232";
     ctx.textAlign = "right"; // For top-right text
 
@@ -590,7 +590,7 @@ export const generateWelcomeImage = async (req: Request, res: Response) => {
     ctx.drawImage(image, 0, 0, image.width, image.height);
 
     // Set text properties
-    ctx.font = "600 25px Poppins";
+    ctx.font = "600 25px";
     ctx.fillStyle = "#323232";
     ctx.textAlign = "right"; // For top-right text
 
