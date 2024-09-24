@@ -20,6 +20,7 @@ import {
   submitGithubLink,
   getUserInternships,
   generateImage,
+  generateWelcomeImage,
 } from "./controller";
 import { authMiddleware } from "./middleware";
 
@@ -54,6 +55,7 @@ enrollmentRouter.get("/enrolled", authMiddleware, getUserInternships);
 enrollmentRouter.post("/submit", authMiddleware, submitGithubLink);
 
 imageRouter.get("/generate-image", generateImage);
+imageRouter.get("/generate-welcome-image", generateWelcomeImage);
 
 export {
   authRouter,
