@@ -120,9 +120,8 @@ export const forgotPassword = async (req: Request, res: Response) => {
     await user.save({ validateBeforeSave: false });
 
     // Create reset URL
-    const resetUrl = `${req.protocol}://${req.get(
-      "host"
-    )}/api/v1/users/resetPassword/${resetToken}`;
+    const appName = "developerabode";
+    const resetUrl = `${appName}://reset-Password/${resetToken}`;
 
     // Send reset email
     try {
