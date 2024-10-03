@@ -24,7 +24,7 @@ export const verifyToken = (token: string) => {
   return jwt.verify(token, config.jwtSecret);
 };
 
-export const sendEmail = async (to: string, subject: string, text: string) => {
+export const sendEmail = async (to: string, subject: string, html: string) => {
   const transporter = nodemailer.createTransport({
     service: "gmail", // You can use other services or SMTP settings
     secure: true,
@@ -39,7 +39,7 @@ export const sendEmail = async (to: string, subject: string, text: string) => {
     from: config.emailUser,
     to,
     subject,
-    text,
+    html,
   };
 
   await transporter.sendMail(mailOptions);

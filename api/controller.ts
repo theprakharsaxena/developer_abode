@@ -79,7 +79,7 @@ export const registerUser = async (req: Request, res: Response) => {
     await sendEmail(
       newUser.email,
       "Email Verification",
-      `Your verification code is: ${verificationCode}`
+      `<p>Your verification code is: ${verificationCode}</p>`
     );
     res
       .status(201)
@@ -128,7 +128,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
       await sendEmail(
         user.email,
         "Password Reset",
-        `Reset your password here: ${resetUrl}`
+        `<p>Click the following link to proceed: <a href="${resetUrl}">${resetUrl}</a></p>`
       );
       res
         .status(200)
