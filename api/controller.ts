@@ -121,8 +121,9 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
     // Create reset URL
     const appName = "developerabode";
+    const webUrl = "https://www.developerabode.com";
     const resetUrl = `${appName}://reset-Password/${resetToken}`;
-
+    const webresetUrl = `${webUrl}/reset-Password/${resetToken}`;
     // Send reset email
     try {
       await sendEmail(
@@ -130,7 +131,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
         "Password Reset",
         `<p>Hello,</p>
 <p>You requested to reset your password. Click the link below to reset your password:</p>
-<a href="${resetUrl}">
+<a href="${webresetUrl}" target="_blank">
   Reset your password
 </a>
 <p>If you didn't request this, you can ignore this email.</p>
