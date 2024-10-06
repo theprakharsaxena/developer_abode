@@ -19,22 +19,22 @@ export const verifyUser = async (req: Request, res: Response) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(400).json({ message: "User not found" });
+      return res.status(200).json({ message: "User not found" });
     }
 
     if (user.isVerified) {
-      return res.status(400).json({ message: "User is already verified" });
+      return res.status(200).json({ message: "User is already verified" });
     }
 
     if (user.verificationCode !== verificationCode) {
-      return res.status(400).json({ message: "Invalid verification code" });
+      return res.status(200).json({ message: "Invalid verification code" });
     }
 
     if (
       user.verificationCodeExpiry &&
       user.verificationCodeExpiry < new Date()
     ) {
-      return res.status(400).json({ message: "Verification code expired" });
+      return res.status(200).json({ message: "Verification code expired" });
     }
 
     user.isVerified = true;
@@ -57,7 +57,7 @@ export const registerUser = async (req: Request, res: Response) => {
     // Check if the user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+      return res.status(200).json({ message: "User already exists" });
     }
 
     // Generate verification code
@@ -95,7 +95,7 @@ export const loginUser = async (req: Request, res: Response) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user || !(await user.comparePassword(password))) {
-      return res.status(400).send("Invalid email or password");
+      return res.status(200).send("Invalid email or password");
     }
     const id = user._id as string;
     const token = generateToken(id);
@@ -167,7 +167,7 @@ export const resetPassword = async (req: Request, res: Response) => {
     });
 
     if (!user) {
-      return res.status(400).json({ message: "Invalid or expired token" });
+      return res.status(200).json({ message: "Invalid or expired token" });
     }
 
     // Update the password and clear the reset token fields
@@ -362,7 +362,7 @@ export const enrollInInternship = async (req: Request, res: Response) => {
 
     if (existingEnrollment) {
       return res
-        .status(400)
+        .status(200)
         .json({ message: "You are already enrolled in this internship" });
     }
 
