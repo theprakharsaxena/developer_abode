@@ -68,11 +68,12 @@ export const registerUser = async (req: Request, res: Response) => {
     }
 
     // Generate verification code
-    const verificationCode = crypto
-      .randomBytes(3)
-      .toString("hex")
-      .toUpperCase(); // Generate a 6-digit code
-    const verificationCodeExpiry = new Date(Date.now() + 10 * 60 * 1000); // Code expires in 10 minutes
+    const verificationCode = String(
+      crypto.randomBytes(3).readUInt32BE(0) % 1000000
+    ).padStart(6, "0");
+
+    // Generate a 6-digit code
+    const verificationCodeExpiry = new Date(Date.now() + 60 * 60 * 1000); // Code expires in 60 minutes
 
     // Create a new user
     const newUser = await User.create({
