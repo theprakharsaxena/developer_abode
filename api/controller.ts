@@ -54,6 +54,13 @@ export const registerUser = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
 
   try {
+    // Check if all required fields are present
+    if (!name || !email || !password) {
+      return res
+        .status(400)
+        .json({ message: "All fields (name, email, password) are required" });
+    }
+
     // Check if the user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -76,11 +83,13 @@ export const registerUser = async (req: Request, res: Response) => {
       verificationCodeExpiry,
     });
 
+    // Send verification email
     await sendEmail(
       newUser.email,
       "Email Verification",
       `<p>Your verification code is: ${verificationCode}</p>`
     );
+
     res
       .status(201)
       .json({ message: "User registered, verification email sent" });
