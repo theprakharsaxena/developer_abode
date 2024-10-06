@@ -57,7 +57,7 @@ export const registerUser = async (req: Request, res: Response) => {
     // Check if the user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(200).json({ message: "User already exists" });
+      return res.status(400).json({ message: "User already exists" });
     }
 
     // Generate verification code
@@ -355,10 +355,12 @@ export const enrollInInternship = async (req: Request, res: Response) => {
 
   try {
     // Check if the user is already enrolled in the internship
+
     const existingEnrollment = await Enrollment.findOne({
       user: userId,
       internship: internshipId,
     });
+    console.log(existingEnrollment);
 
     if (existingEnrollment) {
       return res
