@@ -73,7 +73,9 @@ export const registerUser = async (req: Request, res: Response) => {
     ).padStart(6, "0");
 
     // Generate a 6-digit code
-    const verificationCodeExpiry = new Date(Date.now() + 60 * 60 * 1000); // Code expires in 60 minutes
+    const verificationCodeExpiry = new Date(
+      Date.now() + 7 * 24 * 60 * 60 * 1000
+    ); // Code expires in 7 days
 
     // Create a new user
     const newUser = await User.create({
