@@ -68,9 +68,9 @@ export const registerUser = async (req: Request, res: Response) => {
     }
 
     // Generate verification code
-    const verificationCode = String(
-      crypto.randomBytes(3).readUInt32BE(0) % 1000000
-    ).padStart(6, "0");
+    const verificationCode = Math.floor(
+      100000 + Math.random() * 900000
+    ).toString();
 
     // Generate a 6-digit code
     const verificationCodeExpiry = new Date(
