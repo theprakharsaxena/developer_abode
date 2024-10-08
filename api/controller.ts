@@ -11,7 +11,14 @@ import { generateToken } from "./utils";
 import crypto from "crypto";
 import { sendEmail } from "./utils";
 import { createCanvas, loadImage } from "canvas";
-import { razorpay } from "./middleware";
+import Razorpay from "razorpay";
+import { config } from "./config";
+
+// Initialize Razorpay
+export const razorpay = new Razorpay({
+  key_id: config.razorpayKeyId, // Add your Razorpay key here
+  key_secret: config.razorPayKeySecret,
+});
 
 // API endpoint to create an order
 export const createOrder = async (req: Request, res: Response) => {
