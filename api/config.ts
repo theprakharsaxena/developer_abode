@@ -11,6 +11,8 @@ const jwtExpiration = process.env.JWT_EXPIRATION || "1h";
 const emailUser = process.env.EMAIL_USER || "";
 const emailPassword = process.env.EMAIL_PASSWORD || "";
 const environment = process.env.NODE_ENV || "development";
+const razorpayKeyId = process.env.RAZORPAY_KEY_ID || "";
+const razorPayKeySecret = process.env.RAZORPAY_KEY_SECRET || "";
 
 export const config = {
   port,
@@ -20,4 +22,6 @@ export const config = {
   emailUser,
   emailPassword,
   environment,
+  razorpayKeyId,
+  razorPayKeySecret,
 };

@@ -21,6 +21,8 @@ import {
   getUserInternships,
   generateImage,
   generateWelcomeImage,
+  createOrder,
+  verifyPayment,
 } from "./controller";
 import { authMiddleware } from "./middleware";
 
@@ -30,6 +32,11 @@ const internshipRouter = Router();
 const taskRouter = Router();
 const enrollmentRouter = Router();
 const imageRouter = Router();
+const paymentRouter = Router();
+
+paymentRouter.post("/create-order", createOrder);
+paymentRouter.post("/verify-payment", verifyPayment);
+paymentRouter.post("/", getInternships);
 
 authRouter.post("/verify", verifyUser);
 userRouter.post("/register", registerUser);
@@ -64,4 +71,5 @@ export {
   taskRouter,
   enrollmentRouter,
   imageRouter,
+  paymentRouter,
 };

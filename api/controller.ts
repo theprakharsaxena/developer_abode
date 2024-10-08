@@ -11,6 +11,52 @@ import { generateToken } from "./utils";
 import crypto from "crypto";
 import { sendEmail } from "./utils";
 import { createCanvas, loadImage } from "canvas";
+import { razorpay } from "./middleware";
+
+// API endpoint to create an order
+export const createOrder = async (req: Request, res: Response) => {
+  const { amount } = req.body;
+
+  try {
+    // Create the Razorpay order
+    const order = await razorpay.orders.create({
+      amount: amount * 100, // Amount in smallest currency unit (paise)
+      currency: "INR",
+      payment_capture: 1 as any, // Ensure that `payment_capture` is either boolean or number (TypeScript allows this)
+    });
+
+    // Send back the created order details
+    res.json({
+      id: order.id,
+      currency: order.currency,
+      amount: order.amount,
+    });
+  } catch (error) {
+    console.error("Error creating Razorpay order: ", error);
+    res.status(500).send("Error creating Razorpay order");
+  }
+};
+
+// API endpoint to verify payment and update status
+export const verifyPayment = async (req: Request, res: Response) => {
+  const { order_id, payment_id, signature } = req.body;
+
+  const crypto = require("crypto");
+  const hash = crypto
+    .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+    .update(order_id + "|" + payment_id)
+    .digest("hex");
+
+  if (hash === signature) {
+    // Payment successful, update user payment status
+    // Your logic to update the payment status in your database
+    res.json({ success: true, message: "Payment verified" });
+  } else {
+    res
+      .status(400)
+      .json({ success: false, message: "Invalid payment signature" });
+  }
+};
 
 export const verifyUser = async (req: Request, res: Response) => {
   const { email, verificationCode } = req.body;

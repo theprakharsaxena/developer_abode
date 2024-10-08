@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import { JwtPayload } from "jsonwebtoken";
 import { verifyToken } from "./utils";
 import jwt from "jsonwebtoken";
+import Razorpay from "razorpay";
+import { config } from "./config";
 
 export const authMiddleware = (
   req: Request,
@@ -21,6 +23,12 @@ export const authMiddleware = (
     res.status(400).send("Invalid token.");
   }
 };
+
+// Initialize Razorpay
+export const razorpay = new Razorpay({
+  key_id: config.razorpayKeyId, // Add your Razorpay key here
+  key_secret: config.razorPayKeySecret,
+});
 
 export const canCreate = (allowedRoles: string[], role: string) => {
   return (req: Request, res: Response, next: NextFunction) => {

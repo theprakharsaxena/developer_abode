@@ -5,6 +5,7 @@ import {
   enrollmentRouter,
   imageRouter,
   internshipRouter,
+  paymentRouter,
   taskRouter,
   userRouter,
 } from "./router";
@@ -21,5 +22,6 @@ app.use("/api/v1/internships", internshipRouter);
 app.use("/api/v1/tasks", taskRouter);
 app.use("/api/v1/enrollments", enrollmentRouter);
 app.use("/api/v1/images", imageRouter);
+app.use("/api/v1/payments", paymentRouter);
 
 export default app;
