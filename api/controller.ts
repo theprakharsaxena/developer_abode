@@ -93,7 +93,7 @@ export const initiatePayment = async (req: Request, res: Response) => {
     // Send the payment URL back to the frontend
     res.status(200).json({ paymentUrl: response.data.payment_request.longurl });
   } catch (error) {
-    res.status(500).json({ error: "Failed to initiate payment." });
+    res.status(500).json({ error: `Failed to initiate payment. ${error}` });
   }
 };
 
