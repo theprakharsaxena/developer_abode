@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import helmet from "helmet";
 import {
   authRouter,
@@ -12,6 +13,8 @@ import {
 
 const app = express();
 
+// Enable CORS for all routes and origins
+app.use(cors());
 // Middleware
 app.use(helmet());
 app.use(express.json());
