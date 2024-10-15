@@ -13,6 +13,7 @@ import { sendEmail } from "./utils";
 import { createCanvas, loadImage } from "canvas";
 import Razorpay from "razorpay";
 import { config } from "./config";
+import axios from "axios";
 
 // Initialize Razorpay
 export const razorpay = new Razorpay({
@@ -62,6 +63,34 @@ export const verifyPayment = async (req: Request, res: Response) => {
     res
       .status(400)
       .json({ success: false, message: "Invalid payment signature" });
+  }
+};
+
+export const initiatePayment = async (req: Request, res: Response) => {
+  const { name, email, amount, internshipTitle } = req.body;
+
+  try {
+    const response = await axios.post(
+      "https://test.instamojo.com/api/1.1/payment-requests/",
+      {
+        purpose: internshipTitle, // Description of the course
+        amount: amount, // The price of the internship
+        buyer_name: name, // User's name
+        email: email, // User's email
+        redirect_url: `${config.baseUrl}/payment/success`, // Redirect after successful payment
+      },
+      {
+        headers: {
+          "X-Api-Key": config.instamojoApiKey, // Instamojo API Key
+          "X-Auth-Token": config.instamojoAuthToken, // Instamojo Auth Token
+        },
+      }
+    );
+
+    // Send the payment URL back to the frontend
+    res.status(200).json({ paymentUrl: response.data.payment_request.longurl });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to initiate payment." });
   }
 };
 

@@ -13,6 +13,9 @@ const emailPassword = process.env.EMAIL_PASSWORD || "";
 const environment = process.env.NODE_ENV || "development";
 const razorpayKeyId = process.env.RAZORPAY_KEY_ID || "";
 const razorPayKeySecret = process.env.RAZORPAY_KEY_SECRET || "";
+const baseUrl = process.env.BASE_URL || "";
+const instamojoApiKey = process.env.INSTAMOJO_API_KEY || "";
+const instamojoAuthToken = process.env.INSTAMOJO_AUTH_TOKEN || "";
 
 export const config = {
   port,
@@ -24,4 +27,7 @@ export const config = {
   environment,
   razorpayKeyId,
   razorPayKeySecret,
+  baseUrl,
+  instamojoApiKey,
+  instamojoAuthToken,
 };

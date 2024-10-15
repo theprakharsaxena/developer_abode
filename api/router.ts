@@ -23,6 +23,7 @@ import {
   generateWelcomeImage,
   createOrder,
   verifyPayment,
+  initiatePayment,
 } from "./controller";
 import { authMiddleware } from "./middleware";
 
@@ -36,6 +37,7 @@ const paymentRouter = Router();
 
 paymentRouter.post("/create-order", createOrder);
 paymentRouter.post("/verify-payment", verifyPayment);
+paymentRouter.post("/initiate", initiatePayment);
 paymentRouter.post("/", getInternships);
 
 authRouter.post("/verify", verifyUser);
