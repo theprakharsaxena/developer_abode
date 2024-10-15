@@ -67,7 +67,7 @@ export const verifyPayment = async (req: Request, res: Response) => {
 };
 
 export const initiatePayment = async (req: Request, res: Response) => {
-  const { name, email, amount, internshipTitle } = req.body;
+  const { name, email, phone, amount, internshipTitle } = req.body;
 
   try {
     const response = await axios.post(
@@ -77,6 +77,9 @@ export const initiatePayment = async (req: Request, res: Response) => {
         amount: amount, // The price of the internship
         buyer_name: name, // User's name
         email: email, // User's email
+        phone: phone,
+        send_sms: true,
+        send_email: true,
         redirect_url: `${config.baseUrl}/payment/success`, // Redirect after successful payment
       },
       {
