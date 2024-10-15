@@ -71,7 +71,7 @@ export const initiatePayment = async (req: Request, res: Response) => {
 
   try {
     const response = await axios.post(
-      "https://test.instamojo.com/api/1.1/payment-requests/",
+      "https://www.instamojo.com/api/1.1/payment-requests/",
       {
         purpose: internshipTitle, // Description of the course
         amount: amount, // The price of the internship
